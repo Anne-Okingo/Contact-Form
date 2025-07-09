@@ -1,22 +1,43 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function App() {
   const [status, setStatus] = useState("idle");
+  const [theme, setTheme] = useState("light");
+
+  // Load saved theme on first render
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme") || "light";
+    setTheme(savedTheme);
+  }, []);
+
+  // Apply theme to entire page
+  useEffect(() => {
+    localStorage.setItem("theme", theme);
+    document.body.style.backgroundColor = theme === "dark" ? "#121212" : "#ffffff";
+    document.body.style.color = theme === "dark" ? "#eaeaea" : "#333333";
+    document.body.style.transition = "background-color 0.3s, color 0.3s";
+  }, [theme]);
+
+  const isDark = theme === "dark";
+
+  const handleThemeToggle = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     setStatus("submitting");
-  
+
     const formData = new FormData(form);
-  
+
     try {
       const response = await fetch("https://formspree.io/f/mwpbdznq", {
         method: "POST",
         headers: { Accept: "application/json" },
         body: formData,
       });
-  
+
       if (response.ok) {
         form.reset();
         setStatus("success");
@@ -30,19 +51,44 @@ function App() {
       setStatus("error");
     }
   };
-  
 
   return (
     <main
       style={{
         fontFamily: "Arial, sans-serif",
         maxWidth: "600px",
-        margin: "2rem auto",
-        padding: "1rem",
+        margin: "3rem auto",
+        padding: "2rem",
         lineHeight: 1.6,
-        color: "#333",
+        borderRadius: "8px",
+        boxShadow: isDark
+          ? "0 0 10px rgba(255, 255, 255, 0.1)"
+          : "0 0 10px rgba(0, 0, 0, 0.1)",
+        backgroundColor: isDark ? "#1e1e1e" : "#ffffff",
+        color: isDark ? "#eaeaea" : "#333",
+        transition: "all 0.3s ease",
       }}
     >
+      {/* Theme Toggle */}
+      <div style={{ textAlign: "right", marginBottom: "1rem" }}>
+        <button
+          onClick={handleThemeToggle}
+          aria-label="Toggle theme"
+          style={{
+            background: "none",
+            border: "1px solid",
+            borderColor: isDark ? "#aaa" : "#ccc",
+            padding: "0.5rem 1rem",
+            borderRadius: "4px",
+            cursor: "pointer",
+            color: isDark ? "#fff8dc" : "#333",
+            fontWeight: "bold",
+          }}
+        >
+          {isDark ? "☀️ Light Mode" : "🌙 Dark Mode"}
+        </button>
+      </div>
+
       <h1 tabIndex="0">Contact Me</h1>
       <p tabIndex="0">Fill out the form below and I’ll get back to you!</p>
 
@@ -60,7 +106,7 @@ function App() {
             marginBottom: "1rem",
           }}
         >
-          ✅ Your message has been sent successfully!
+         Your message has been sent successfully!
         </div>
       )}
 
@@ -78,7 +124,7 @@ function App() {
             marginBottom: "1rem",
           }}
         >
-          ❌ Something went wrong. Please try again.
+          Something went wrong. Please try again.
         </div>
       )}
 
@@ -93,7 +139,7 @@ function App() {
           aria-required="true"
           placeholder="Your name"
           aria-label="Name"
-          style={inputStyle}
+          style={inputStyle(isDark)}
         />
 
         <label htmlFor="email">Email:</label>
@@ -105,7 +151,7 @@ function App() {
           aria-required="true"
           placeholder="your@email.com"
           aria-label="Email"
-          style={inputStyle}
+          style={inputStyle(isDark)}
         />
 
         <label htmlFor="message">Message:</label>
@@ -117,7 +163,7 @@ function App() {
           rows="5"
           placeholder="Write your message here..."
           aria-label="Message"
-          style={{ ...inputStyle, resize: "vertical" }}
+          style={{ ...inputStyle(isDark), resize: "vertical" }}
         />
 
         <button
@@ -132,16 +178,18 @@ function App() {
   );
 }
 
-// ✅ Style Objects
-const inputStyle = {
+// Style functions
+const inputStyle = (isDark) => ({
   width: "100%",
   padding: "0.75rem",
   fontSize: "1rem",
   marginBottom: "1.5rem",
   border: "1px solid #ccc",
   borderRadius: "4px",
+  backgroundColor: isDark ? "#2a2a2a" : "#fff",
+  color: isDark ? "#f1f1f1" : "#000",
   outlineColor: "#007bff",
-};
+});
 
 const buttonStyle = {
   backgroundColor: "#007bff",
