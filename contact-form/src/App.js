@@ -31,13 +31,13 @@ function App() {
 
       {status === "success" && (
         <div role="status" style={{ color: "green", marginBottom: "1rem" }}>
-          ✅ Your message has been sent!
+           Your message has been sent successfully!
         </div>
       )}
 
       {status === "error" && (
         <div role="alert" style={{ color: "red", marginBottom: "1rem" }}>
-          ❌ Something went wrong. Please try again.
+          Something went wrong. Please try again.
         </div>
       )}
 
