@@ -25,30 +25,67 @@ function App() {
   };
 
   return (
-    <main style={{ fontFamily: "Arial", maxWidth: "600px", margin: "2rem auto" }}>
-      <h1>Contact Me</h1>
-      <p>Fill out the form below and I’ll get back to you!</p>
+    <main
+      style={{
+        fontFamily: "Arial, sans-serif",
+        maxWidth: "600px",
+        margin: "2rem auto",
+        padding: "1rem",
+        lineHeight: 1.6,
+        color: "#333",
+      }}
+    >
+      <h1 tabIndex="0">Contact Me</h1>
+      <p tabIndex="0">Fill out the form below and I’ll get back to you!</p>
 
+      {/* Success Message */}
       {status === "success" && (
-        <div role="status" style={{ color: "green", marginBottom: "1rem" }}>
-           Your message has been sent successfully!
+        <div
+          role="status"
+          aria-live="polite"
+          style={{
+            color: "#155724",
+            backgroundColor: "#d4edda",
+            border: "1px solid #c3e6cb",
+            padding: "1rem",
+            borderRadius: "4px",
+            marginBottom: "1rem",
+          }}
+        >
+          ✅ Your message has been sent successfully!
         </div>
       )}
 
+      {/* Error Message */}
       {status === "error" && (
-        <div role="alert" style={{ color: "red", marginBottom: "1rem" }}>
-          Something went wrong. Please try again.
+        <div
+          role="alert"
+          aria-live="assertive"
+          style={{
+            color: "#721c24",
+            backgroundColor: "#f8d7da",
+            border: "1px solid #f5c6cb",
+            padding: "1rem",
+            borderRadius: "4px",
+            marginBottom: "1rem",
+          }}
+        >
+          ❌ Something went wrong. Please try again.
         </div>
       )}
 
-      <form onSubmit={handleSubmit}>
+      {/* Contact Form */}
+      <form onSubmit={handleSubmit} aria-label="Contact Form">
         <label htmlFor="name">Name:</label>
         <input
           name="name"
           id="name"
           type="text"
           required
-          style={{ width: "100%", padding: "0.5rem", marginBottom: "1rem" }}
+          aria-required="true"
+          placeholder="Your name"
+          aria-label="Name"
+          style={inputStyle}
         />
 
         <label htmlFor="email">Email:</label>
@@ -57,7 +94,10 @@ function App() {
           id="email"
           type="email"
           required
-          style={{ width: "100%", padding: "0.5rem", marginBottom: "1rem" }}
+          aria-required="true"
+          placeholder="your@email.com"
+          aria-label="Email"
+          style={inputStyle}
         />
 
         <label htmlFor="message">Message:</label>
@@ -65,21 +105,17 @@ function App() {
           name="message"
           id="message"
           required
+          aria-required="true"
           rows="5"
-          style={{ width: "100%", padding: "0.5rem", marginBottom: "1rem" }}
+          placeholder="Write your message here..."
+          aria-label="Message"
+          style={{ ...inputStyle, resize: "vertical" }}
         />
 
         <button
           type="submit"
           disabled={status === "submitting"}
-          style={{
-            backgroundColor: "#007bff",
-            color: "#fff",
-            padding: "0.6rem 1.2rem",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-          }}
+          style={buttonStyle}
         >
           {status === "submitting" ? "Sending..." : "Send Message"}
         </button>
@@ -87,5 +123,26 @@ function App() {
     </main>
   );
 }
+
+// ✅ Style Objects
+const inputStyle = {
+  width: "100%",
+  padding: "0.75rem",
+  fontSize: "1rem",
+  marginBottom: "1.5rem",
+  border: "1px solid #ccc",
+  borderRadius: "4px",
+  outlineColor: "#007bff",
+};
+
+const buttonStyle = {
+  backgroundColor: "#007bff",
+  color: "#fff",
+  padding: "0.75rem 1.5rem",
+  fontSize: "1rem",
+  border: "none",
+  borderRadius: "4px",
+  cursor: "pointer",
+};
 
 export default App;
