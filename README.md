@@ -3,13 +3,6 @@
 A responsive and accessible contact form built with **React**, styled for both **dark and light mode**, and powered by [Formspree](https://formspree.io) for message submissions.
 
 
----
-
-## Live Demo
-
-🔗 [Visit the Contact Form](https://yourusername.github.io/contact-form)
-
-> Replace with your actual GitHub Pages URL
 
 ---
 
