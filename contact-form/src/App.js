@@ -7,22 +7,30 @@ function App() {
     e.preventDefault();
     const form = e.target;
     setStatus("submitting");
-
+  
     const formData = new FormData(form);
-
-    const response = await fetch("https://formspree.io/f/mwpbdznq", {
-      method: "POST",
-      headers: { Accept: "application/json" },
-      body: formData,
-    });
-
-    if (response.ok) {
-      form.reset();
-      setStatus("success");
-    } else {
+  
+    try {
+      const response = await fetch("https://formspree.io/f/mwpbdznq", {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: formData,
+      });
+  
+      if (response.ok) {
+        form.reset();
+        setStatus("success");
+      } else {
+        const data = await response.json();
+        console.error("Formspree error:", data);
+        setStatus("error");
+      }
+    } catch (err) {
+      console.error("Network or unexpected error:", err.message);
       setStatus("error");
     }
   };
+  
 
   return (
     <main
